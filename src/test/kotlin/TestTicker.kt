@@ -1,12 +1,12 @@
 class TestTicker : Ticker {
 
-    var listener: Ticker.TickListener? = null
+    var tickListener: Ticker.TickListener? = null
 
-    override fun start(listener: Ticker.TickListener) {
-        this.listener = listener
+    override fun start(tickListener: Ticker.TickListener) {
+        this.tickListener = tickListener
     }
 
     override fun stop() {
-        this.listener = null
+        this.tickListener = null
     }
 }

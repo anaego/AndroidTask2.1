@@ -1,9 +1,8 @@
-import java.util.*
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
+
 
 interface Ticker {
 
@@ -11,7 +10,7 @@ interface Ticker {
         fun onTick()
     }
 
-    fun start(listener: TickListener)
+    fun start(tickListener: TickListener)
     fun stop()
 
     class Impl : Ticker {
@@ -19,13 +18,15 @@ interface Ticker {
         private val scheduler = Executors.newScheduledThreadPool(1)
         private val future = AtomicReference<ScheduledFuture<*>>()
 
-        override fun start(listener: TickListener) {
-            future.set(scheduler.scheduleAtFixedRate({ listener.onTick() }, 0, 1, TimeUnit.SECONDS))
+        override fun start(tickListener: TickListener) {
+            future.set(scheduler.scheduleAtFixedRate({ tickListener.onTick() }, 0, 1, TimeUnit.SECONDS))
+            println("Ticker: resumeStopwatch() started scheduler prbbly")
         }
 
         override fun stop() {
             // TODO should it be true or false?
             future.get().cancel(true)
+            println("Ticker: canceled the future")
         }
     }
 }

@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.never
@@ -12,21 +11,21 @@ class StopwatchTest {
         val stopwatch = Stopwatch.Impl(ticker)
 
         // TODO Stopwatch.Listener::class.java instead of Stopwatch.Listener::class?
-        val listener = Mockito.mock(Stopwatch.Listener::class.java)
+        val stopwatchListener = Mockito.mock(Stopwatch.StopwatchListener::class.java)
 
-        stopwatch.start(listener)
-        ticker.listener?.onTick()
+        stopwatch.resumeStopwatch(stopwatchListener)
+        ticker.tickListener?.onTick()
 
-        Mockito.verify(listener).onChange(1)
+        Mockito.verify(stopwatchListener).onValueChange(1)
 
-        ticker.listener?.onTick()
+        ticker.tickListener?.onTick()
 
-        Mockito.verify(listener).onChange(2)
+        Mockito.verify(stopwatchListener).onValueChange(2)
 
-        stopwatch.stop(listener)
-        ticker.listener?.onTick()
+        stopwatch.pauseStopwatch(stopwatchListener)
+        ticker.tickListener?.onTick()
 
         // TODO  instead of Mockito.verifyNever(listener).onChange(3)?
-        Mockito.verify(listener, never()).onChange(3)
+        Mockito.verify(stopwatchListener, never()).onValueChange(3)
     }
 }
