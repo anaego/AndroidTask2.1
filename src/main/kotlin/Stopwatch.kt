@@ -10,10 +10,10 @@ interface Stopwatch {
     fun resumeStopwatch(stopwatchListener: StopwatchListener)
     fun pauseStopwatch(stopwatchListener: StopwatchListener)
 
-    class Impl(val ticker: Ticker) : Stopwatch, Ticker.TickListener {
+    class Impl(private val ticker: Ticker) : Stopwatch, Ticker.TickListener {
 
         private val listeners = CopyOnWriteArraySet<StopwatchListener>()
-        val value = AtomicLong(0)
+        private val value = AtomicLong(0)
 
         override fun onTick() {
             val newValue = value.incrementAndGet()
