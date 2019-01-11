@@ -22,7 +22,6 @@ interface Stopwatch {
 
         override fun resumeStopwatch(stopwatchListener: StopwatchListener) {
             listeners.add(stopwatchListener)
-
             if (listeners.size == 1) {
                 ticker.start(this)
             }

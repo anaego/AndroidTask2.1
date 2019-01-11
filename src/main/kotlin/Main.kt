@@ -1,4 +1,5 @@
 fun main(arguments: Array<String>) {
+
     val stopwatch = Stopwatch.Impl(Ticker.Impl())
 
     val listener1 = object : Stopwatch.StopwatchListener {
