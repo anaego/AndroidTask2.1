@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="StopwatchTest" tests="3" skipped="0" failures="1" errors="0" timestamp="2019-01-11T07:34:57" hostname="workmac-2.local" time="20.865">
+<testsuite name="StopwatchTest" tests="2" skipped="0" failures="1" errors="0" timestamp="2019-01-11T08:10:32" hostname="workmac-2.local" time="20.664">
   <properties/>
-  <testcase name="wasFutureCanceled()" classname="StopwatchTest" time="0.019"/>
-  <testcase name="stopwatchValueAfterStop()" classname="StopwatchTest" time="20.008"/>
-  <testcase name="itWorks()" classname="StopwatchTest" time="0.831">
+  <testcase name="stopwatchValueAfterStop()" classname="StopwatchTest" time="20.02"/>
+  <testcase name="itWorks()" classname="StopwatchTest" time="0.644">
     <failure message="org.opentest4j.AssertionFailedError: expected: &lt;2&gt; but was: &lt;3&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;2&gt; but was: &lt;3&gt;
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:54)
 	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:195)
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:152)
 	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:147)
 	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:327)
-	at StopwatchTest.itWorks(StopwatchTest.kt:31)
+	at StopwatchTest.itWorks(StopwatchTest.kt:28)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -77,72 +76,6 @@
 	at java.base/java.lang.Thread.run(Thread.java:844)
 </failure>
   </testcase>
-  <system-out><![CDATA[Main: Listener1: 1
-Ticker: resumeStopwatch() started scheduler prbbly
-Stopwatch : onTick() in Ticker.TickListener, value 1
-Main: Listener1: 1
-Stopwatch : onTick() in Ticker.TickListener, value 1
-Ticker: resumeStopwatch() started scheduler prbbly
-Main: Listener1: 2
-Main: Listener2: 2
-Stopwatch : onTick() in Ticker.TickListener, value 2
-Main: Listener1: 2
-Main: Listener2: 2
-Stopwatch : onTick() in Ticker.TickListener, value 2
-Main: Listener1: 3
-Main: Listener2: 3
-Stopwatch : onTick() in Ticker.TickListener, value 3
-Main: Listener1: 3
-Main: Listener2: 3
-Stopwatch : onTick() in Ticker.TickListener, value 3
-Main: Listener1: 4
-Main: Listener2: 4
-Stopwatch : onTick() in Ticker.TickListener, value 4
-Main: Listener1: 4
-Main: Listener2: 4
-Stopwatch : onTick() in Ticker.TickListener, value 4
-Main: Listener1: 5
-Main: Listener2: 5
-Stopwatch: pauseStopwatch() - removed stopwatchListener
-Main: Listener2 reached 5 & stopped the stopwatch
-Stopwatch : onTick() in Ticker.TickListener, value 5
-Main: Listener1: 5
-Main: Listener2: 5
-Stopwatch: pauseStopwatch() - removed stopwatchListener
-Main: Listener2 reached 5 & stopped the stopwatch
-Stopwatch : onTick() in Ticker.TickListener, value 5
-Main: Listener1: 6
-Stopwatch : onTick() in Ticker.TickListener, value 6
-Main: Listener1: 6
-Stopwatch : onTick() in Ticker.TickListener, value 6
-Main: Listener1: 7
-Stopwatch : onTick() in Ticker.TickListener, value 7
-Main: Listener1: 7
-Stopwatch : onTick() in Ticker.TickListener, value 7
-Main: Listener1: 8
-Stopwatch : onTick() in Ticker.TickListener, value 8
-Main: Listener1: 8
-Stopwatch : onTick() in Ticker.TickListener, value 8
-Main: Listener1: 9
-Stopwatch : onTick() in Ticker.TickListener, value 9
-Main: Listener1: 9
-Stopwatch : onTick() in Ticker.TickListener, value 9
-Main: Listener1: 10
-Stopwatch: pauseStopwatch() - removed stopwatchListener
-Ticker: canceled the future
-Stopwatch: pauseStopwatch() - stopped ticker
-Main: Listener1 reached 10 & stopped the stopwatch
-Stopwatch : onTick() in Ticker.TickListener, value 10
-Main: Listener1: 10
-Stopwatch: pauseStopwatch() - removed stopwatchListener
-Ticker: canceled the future
-Stopwatch: pauseStopwatch() - stopped ticker
-Main: Listener1 reached 10 & stopped the stopwatch
-Stopwatch : onTick() in Ticker.TickListener, value 10
-Stopwatch : onTick() in Ticker.TickListener, value 1
-Stopwatch : onTick() in Ticker.TickListener, value 2
-Stopwatch: pauseStopwatch() - removed stopwatchListener
-Stopwatch: pauseStopwatch() - stopped ticker
-]]></system-out>
+  <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

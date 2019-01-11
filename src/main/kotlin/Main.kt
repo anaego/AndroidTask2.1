@@ -1,25 +1,20 @@
 fun main(arguments: Array<String>) {
-    // changed: Stopwatch.Impl(Ticker.Impl()) instead of Stopwatch(Ticker.Impl())
     val stopwatch = Stopwatch.Impl(Ticker.Impl())
 
     val listener1 = object : Stopwatch.StopwatchListener {
         override fun onValueChange(value: Long) {
-            println("Main: Listener1: $value")
-
+            println("listener1 value $value")
             if (value > 9) {
                 stopwatch.pauseStopwatch(this) // changed: this instead of listener1
-                println("Main: Listener1 reached 10 & stopped the stopwatch")
             }
         }
     }
 
     val listener2 = object : Stopwatch.StopwatchListener {
         override fun onValueChange(value: Long) {
-            println("Main: Listener2: $value")
-
+            println("listener2 value $value")
             if (value > 4) {
                 stopwatch.pauseStopwatch(this) // changed: this instead of listener2
-                println("Main: Listener2 reached 5 & stopped the stopwatch")
             }
         }
     }

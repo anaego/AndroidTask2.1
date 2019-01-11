@@ -16,31 +16,22 @@ interface Stopwatch {
         val value = AtomicLong(0)
 
         override fun onTick() {
-            // changed: deleted function body. should something be in there? it's not used anywhere
+            val newValue = value.incrementAndGet()
+            listeners.forEach { it.onValueChange(newValue) }
         }
 
         override fun resumeStopwatch(stopwatchListener: StopwatchListener) {
             listeners.add(stopwatchListener)
 
             if (listeners.size == 1) {
-                ticker.start(object : Ticker.TickListener {
-                    override fun onTick() {
-                        // changed: should there be something else???
-                        val newValue = value.incrementAndGet()
-                        listeners.forEach { it.onValueChange(newValue) }
-                        println("Stopwatch : onTick() in Ticker.TickListener, value " + newValue)
-                    }
-                })
+                ticker.start(this)
             }
         }
 
         override fun pauseStopwatch(stopwatchListener: StopwatchListener) {
             listeners.remove(stopwatchListener)
-            println("Stopwatch: pauseStopwatch() - removed stopwatchListener")
-
             if (listeners.size == 0) {
                 ticker.stop()
-                println("Stopwatch: pauseStopwatch() - stopped ticker")
             }
         }
     }
