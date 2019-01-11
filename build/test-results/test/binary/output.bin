@@ -1,0 +1,66 @@
+Main: Listener1: 1
+3Ticker: resumeStopwatch() started scheduler prbbly
+5Stopwatch : onTick() in Ticker.TickListener, value 1
+Main: Listener1: 1
+5Stopwatch : onTick() in Ticker.TickListener, value 1
+3Ticker: resumeStopwatch() started scheduler prbbly
+Main: Listener1: 2
+Main: Listener2: 2
+5Stopwatch : onTick() in Ticker.TickListener, value 2
+Main: Listener1: 2
+Main: Listener2: 2
+5Stopwatch : onTick() in Ticker.TickListener, value 2
+Main: Listener1: 3
+Main: Listener2: 3
+5Stopwatch : onTick() in Ticker.TickListener, value 3
+Main: Listener1: 3
+Main: Listener2: 3
+5Stopwatch : onTick() in Ticker.TickListener, value 3
+Main: Listener1: 4
+Main: Listener2: 4
+5Stopwatch : onTick() in Ticker.TickListener, value 4
+Main: Listener1: 4
+Main: Listener2: 4
+5Stopwatch : onTick() in Ticker.TickListener, value 4
+Main: Listener1: 5
+Main: Listener2: 5
+8Stopwatch: pauseStopwatch() - removed stopwatchListener
+2Main: Listener2 reached 5 & stopped the stopwatch
+5Stopwatch : onTick() in Ticker.TickListener, value 5
+Main: Listener1: 5
+Main: Listener2: 5
+8Stopwatch: pauseStopwatch() - removed stopwatchListener
+2Main: Listener2 reached 5 & stopped the stopwatch
+5Stopwatch : onTick() in Ticker.TickListener, value 5
+Main: Listener1: 6
+5Stopwatch : onTick() in Ticker.TickListener, value 6
+Main: Listener1: 6
+5Stopwatch : onTick() in Ticker.TickListener, value 6
+Main: Listener1: 7
+5Stopwatch : onTick() in Ticker.TickListener, value 7
+Main: Listener1: 7
+5Stopwatch : onTick() in Ticker.TickListener, value 7
+Main: Listener1: 8
+5Stopwatch : onTick() in Ticker.TickListener, value 8
+Main: Listener1: 8
+5Stopwatch : onTick() in Ticker.TickListener, value 8
+Main: Listener1: 9
+5Stopwatch : onTick() in Ticker.TickListener, value 9
+Main: Listener1: 9
+5Stopwatch : onTick() in Ticker.TickListener, value 9
+Main: Listener1: 10
+8Stopwatch: pauseStopwatch() - removed stopwatchListener
+Ticker: canceled the future
+-Stopwatch: pauseStopwatch() - stopped ticker
+3Main: Listener1 reached 10 & stopped the stopwatch
+6Stopwatch : onTick() in Ticker.TickListener, value 10
+Main: Listener1: 10
+8Stopwatch: pauseStopwatch() - removed stopwatchListener
+Ticker: canceled the future
+-Stopwatch: pauseStopwatch() - stopped ticker
+3Main: Listener1 reached 10 & stopped the stopwatch
+6Stopwatch : onTick() in Ticker.TickListener, value 10
+5Stopwatch : onTick() in Ticker.TickListener, value 1
+5Stopwatch : onTick() in Ticker.TickListener, value 2
+8Stopwatch: pauseStopwatch() - removed stopwatchListener
+-Stopwatch: pauseStopwatch() - stopped ticker

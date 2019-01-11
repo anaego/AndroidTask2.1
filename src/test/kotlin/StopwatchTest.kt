@@ -28,6 +28,7 @@ class StopwatchTest {
 
         // changed: instead of Mockito.verifyNever(listener).onChange(3)?
         Mockito.verify(stopwatchListener, never()).onValueChange(3)
+        assertEquals(2, 3)
     }
 
 
