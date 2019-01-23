@@ -1,8 +1,6 @@
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.never
 import java.util.concurrent.TimeUnit
 
 class CorrectStopwatchTest {
