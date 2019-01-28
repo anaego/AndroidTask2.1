@@ -14,17 +14,21 @@ class CorrectStopwatchTest {
 
         stopwatch.value.subscribe(observer1)
 
+        stopwatch.resume()
+
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 0)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 1)
 
-        observer1.dispose()
+        stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueCount(2)
         observer1.assertValueAt(observer1.valueCount()-1, 1)
+
+        observer1.dispose()
     }
 
     @Test
@@ -37,26 +41,43 @@ class CorrectStopwatchTest {
 
         stopwatch.value.subscribe(observer1)
 
+        stopwatch.resume()
+
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 0)
+        observer2.assertNever(0)
 
         stopwatch.value.subscribe(observer2)
+
+        stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 1)
         observer2.assertValueAt(observer2.valueCount()-1, 1)
 
-        observer1.dispose()
-
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
+        observer1.assertValueAt(observer1.valueCount()-1, 2)
         observer2.assertValueAt(observer2.valueCount()-1, 2)
 
-        observer2.dispose()
+        stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
-        observer2.assertValueAt(observer2.valueCount()-1, 2)
+        observer1.assertValueAt(observer1.valueCount()-1, 3)
+        observer2.assertValueAt(observer2.valueCount()-1, 3)
+
+        observer2.cancel()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount()-1, 4)
+        observer2.assertValueAt(observer2.valueCount()-1, 3)
+
+        stopwatch.pause()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount()-1, 4)
+        observer2.assertValueAt(observer2.valueCount()-1, 3)
+
+        observer1.cancel()
     }
 
     @Test
@@ -72,12 +93,16 @@ class CorrectStopwatchTest {
 
         stopwatch.value.subscribe(observer1)
 
+        stopwatch.resume()
+
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 0)
         observer2.assertNever(0)
         observer3.assertNever(0)
         observer4.assertNever(0)
         observer5.assertNever(0)
+
+        stopwatch.resume()
 
         stopwatch.value.subscribe(observer2)
 
@@ -88,6 +113,8 @@ class CorrectStopwatchTest {
         observer4.assertNever(1)
         observer5.assertNever(1)
 
+        stopwatch.resume()
+
         stopwatch.value.subscribe(observer3)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
@@ -97,7 +124,9 @@ class CorrectStopwatchTest {
         observer4.assertNever(2)
         observer5.assertNever(2)
 
-        observer2.dispose()
+        stopwatch.pause()
+
+        observer2.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 3)
@@ -106,7 +135,9 @@ class CorrectStopwatchTest {
         observer4.assertNever(3)
         observer5.assertNever(3)
 
-        observer1.dispose()
+        stopwatch.pause()
+
+        observer1.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(4)
@@ -114,6 +145,8 @@ class CorrectStopwatchTest {
         observer3.assertValueAt(observer3.valueCount()-1, 4)
         observer4.assertNever(4)
         observer5.assertNever(4)
+
+        stopwatch.resume()
 
         stopwatch.value.subscribe(observer4)
 
@@ -124,7 +157,9 @@ class CorrectStopwatchTest {
         observer4.assertValueAt(observer4.valueCount()-1, 5)
         observer5.assertNever(5)
 
-        observer4.dispose()
+        stopwatch.pause()
+
+        observer4.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(6)
@@ -132,6 +167,8 @@ class CorrectStopwatchTest {
         observer3.assertValueAt(observer3.valueCount()-1, 6)
         observer4.assertNever(6)
         observer5.assertNever(6)
+
+        stopwatch.resume()
 
         stopwatch.value.subscribe(observer5)
 
@@ -142,7 +179,9 @@ class CorrectStopwatchTest {
         observer4.assertNever(7)
         observer5.assertValueAt(observer5.valueCount()-1, 7)
 
-        observer3.dispose()
+        stopwatch.pause()
+
+        observer3.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(8)
@@ -151,7 +190,9 @@ class CorrectStopwatchTest {
         observer4.assertNever(8)
         observer5.assertValueAt(observer5.valueCount()-1, 8)
 
-        observer5.dispose()
+        stopwatch.pause()
+
+        observer5.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(9)
@@ -171,17 +212,23 @@ class CorrectStopwatchTest {
 
         stopwatch.value.subscribe(observer1)
 
+        stopwatch.resume()
+
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueAt(observer1.valueCount()-1, 0)
         observer2.assertNever(0)
 
-        observer1.dispose()
+        stopwatch.pause()
+
+        observer1.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(1)
         observer2.assertNever(1)
 
         stopwatch.value.subscribe(observer2)
+
+        stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(1)
@@ -191,11 +238,13 @@ class CorrectStopwatchTest {
         observer1.assertNever(2)
         observer2.assertValueAt(observer2.valueCount()-1, 2)
 
-        observer2.dispose()
+        stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(3)
         observer2.assertNever(3)
+
+        observer2.cancel()
     }
 
 }
