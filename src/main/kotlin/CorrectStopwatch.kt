@@ -1,6 +1,7 @@
-import hu.akarnokd.rxjava2.operators.ObservableTransformers
 import io.reactivex.Observable
+import io.reactivex.ObservableTransformer
 import io.reactivex.Scheduler
+import io.reactivex.functions.BiFunction
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.BehaviorSubject
@@ -17,15 +18,33 @@ interface CorrectStopwatch {
 
     class Impl(private val scheduler: Scheduler) : CorrectStopwatch {
 
+        override val value: Observable<Long>
+            get() = combinedParts
+
+        // we need this to control combineLatest so that it only emits when valueEmitterThing emits, not when manager emits
+        private fun valueChecker(valueEmitterThingValue : Long, managerValue : Long) : Long {
+            val newValue : Long
+            if (valueEmitterThingCounter.get() - 1 != valueEmitterThingKeeper.get())
+                newValue = (valueEmitterThingValue + 1) * managerValue
+            else
+                newValue = 0
+            valueEmitterThingKeeper.set(valueEmitterThingCounter.get() - 1)
+            return newValue
+        }
+
+        private val actualValueCounter = AtomicLong()
+        private val valueEmitterThingCounter = AtomicLong()
+        private val valueEmitterThingKeeper = AtomicLong(200)
         private val manager = PublishSubject.create<Long>()
         private val valueEmitterThing = BehaviorSubject.interval(1, TimeUnit.SECONDS, scheduler)
-            .compose(ObservableTransformers.valve(manager.scan{ x, y->x+y}.map{ x -> x > 0}, false))
-            .map{tick -> counter.getAndIncrement()}
+        private val combinedParts = Observable.combineLatest(valueEmitterThing
+                    .map{ _ -> valueEmitterThingCounter.getAndIncrement()},
+                manager.scan{ x, y -> x + y },
+                BiFunction {valueEmitterThingValue : Long, managerValue : Long
+                    -> valueChecker(valueEmitterThingValue, managerValue)})
+            .filter{ x -> x > 0 }
+            .map{ _ -> actualValueCounter.getAndIncrement() }
             .share()
-        private val counter = AtomicLong()
-
-        override val value: Observable<Long>
-            get() = valueEmitterThing
 
         override fun pause() {
             manager.onNext(-1)
