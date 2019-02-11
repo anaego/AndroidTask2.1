@@ -3,12 +3,12 @@ import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.Test
 import java.util.concurrent.TimeUnit
 
-class CorrectStopwatchTest {
+class StopwatchTest {
 
     @Test
     fun itWorks() {
         val testScheduler = TestScheduler()
-        val stopwatch = CorrectStopwatch.Impl(testScheduler)
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
         val observer1 = TestObserver<Long>()
 
@@ -34,7 +34,7 @@ class CorrectStopwatchTest {
     @Test
     fun twoObserversTest() {
         val testScheduler = TestScheduler()
-        val stopwatch = CorrectStopwatch.Impl(testScheduler)
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
         val observer1 = TestObserver<Long>()
         val observer2 = TestObserver<Long>()
@@ -83,7 +83,7 @@ class CorrectStopwatchTest {
     @Test
     fun fiveObserversTest() {
         val testScheduler = TestScheduler()
-        val stopwatch = CorrectStopwatch.Impl(testScheduler)
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
         val observer1 = TestObserver<Long>()
         val observer2 = TestObserver<Long>()
@@ -205,7 +205,7 @@ class CorrectStopwatchTest {
     @Test
     fun resumeAfterPauseAll() {
         val testScheduler = TestScheduler()
-        val stopwatch = CorrectStopwatch.Impl(testScheduler)
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
         val observer1 = TestObserver<Long>()
         val observer2 = TestObserver<Long>()
