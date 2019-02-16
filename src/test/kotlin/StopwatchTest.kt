@@ -17,16 +17,16 @@ class StopwatchTest {
         stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 0)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
 
         stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertValueCount(2)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
 
         observer1.dispose()
     }
@@ -44,7 +44,7 @@ class StopwatchTest {
         stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 0)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
         observer2.assertNever(0)
 
         stopwatch.value.subscribe(observer2)
@@ -52,30 +52,30 @@ class StopwatchTest {
         stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
-        observer2.assertValueAt(observer2.valueCount()-1, 1)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 2)
-        observer2.assertValueAt(observer2.valueCount()-1, 2)
+        observer1.assertValueAt(observer1.valueCount() - 1, 2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
 
         stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 3)
-        observer2.assertValueAt(observer2.valueCount()-1, 3)
+        observer1.assertValueAt(observer1.valueCount() - 1, 3)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
 
         observer2.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 4)
-        observer2.assertValueAt(observer2.valueCount()-1, 3)
+        observer1.assertValueAt(observer1.valueCount() - 1, 4)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
 
         stopwatch.pause()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 4)
-        observer2.assertValueAt(observer2.valueCount()-1, 3)
+        observer1.assertValueAt(observer1.valueCount() - 1, 4)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
 
         observer1.cancel()
     }
@@ -96,7 +96,7 @@ class StopwatchTest {
         stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 0)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
         observer2.assertNever(0)
         observer3.assertNever(0)
         observer4.assertNever(0)
@@ -107,8 +107,8 @@ class StopwatchTest {
         stopwatch.value.subscribe(observer2)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 1)
-        observer2.assertValueAt(observer2.valueCount()-1, 1)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
         observer3.assertNever(1)
         observer4.assertNever(1)
         observer5.assertNever(1)
@@ -118,9 +118,9 @@ class StopwatchTest {
         stopwatch.value.subscribe(observer3)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 2)
-        observer2.assertValueAt(observer2.valueCount()-1, 2)
-        observer3.assertValueAt(observer3.valueCount()-1, 2)
+        observer1.assertValueAt(observer1.valueCount() - 1, 2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
+        observer3.assertValueAt(observer3.valueCount() - 1, 2)
         observer4.assertNever(2)
         observer5.assertNever(2)
 
@@ -129,9 +129,9 @@ class StopwatchTest {
         observer2.cancel()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 3)
+        observer1.assertValueAt(observer1.valueCount() - 1, 3)
         observer2.assertNever(3)
-        observer3.assertValueAt(observer3.valueCount()-1, 3)
+        observer3.assertValueAt(observer3.valueCount() - 1, 3)
         observer4.assertNever(3)
         observer5.assertNever(3)
 
@@ -142,7 +142,7 @@ class StopwatchTest {
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(4)
         observer2.assertNever(4)
-        observer3.assertValueAt(observer3.valueCount()-1, 4)
+        observer3.assertValueAt(observer3.valueCount() - 1, 4)
         observer4.assertNever(4)
         observer5.assertNever(4)
 
@@ -153,8 +153,8 @@ class StopwatchTest {
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(5)
         observer2.assertNever(5)
-        observer3.assertValueAt(observer3.valueCount()-1, 5)
-        observer4.assertValueAt(observer4.valueCount()-1, 5)
+        observer3.assertValueAt(observer3.valueCount() - 1, 5)
+        observer4.assertValueAt(observer4.valueCount() - 1, 5)
         observer5.assertNever(5)
 
         stopwatch.pause()
@@ -164,7 +164,7 @@ class StopwatchTest {
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(6)
         observer2.assertNever(6)
-        observer3.assertValueAt(observer3.valueCount()-1, 6)
+        observer3.assertValueAt(observer3.valueCount() - 1, 6)
         observer4.assertNever(6)
         observer5.assertNever(6)
 
@@ -175,9 +175,9 @@ class StopwatchTest {
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(7)
         observer2.assertNever(7)
-        observer3.assertValueAt(observer3.valueCount()-1, 7)
+        observer3.assertValueAt(observer3.valueCount() - 1, 7)
         observer4.assertNever(7)
-        observer5.assertValueAt(observer5.valueCount()-1, 7)
+        observer5.assertValueAt(observer5.valueCount() - 1, 7)
 
         stopwatch.pause()
 
@@ -188,7 +188,7 @@ class StopwatchTest {
         observer2.assertNever(8)
         observer3.assertNever(8)
         observer4.assertNever(8)
-        observer5.assertValueAt(observer5.valueCount()-1, 8)
+        observer5.assertValueAt(observer5.valueCount() - 1, 8)
 
         stopwatch.pause()
 
@@ -215,7 +215,7 @@ class StopwatchTest {
         stopwatch.resume()
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
-        observer1.assertValueAt(observer1.valueCount()-1, 0)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
         observer2.assertNever(0)
 
         stopwatch.pause()
@@ -232,11 +232,11 @@ class StopwatchTest {
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(1)
-        observer2.assertValueAt(observer2.valueCount()-1, 1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
 
         testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
         observer1.assertNever(2)
-        observer2.assertValueAt(observer2.valueCount()-1, 2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
 
         stopwatch.pause()
 
