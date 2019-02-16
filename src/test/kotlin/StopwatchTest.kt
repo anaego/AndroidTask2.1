@@ -1,242 +1,250 @@
+import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.never
+import java.util.concurrent.TimeUnit
 
 class StopwatchTest {
 
     @Test
     fun itWorks() {
-        val ticker = TestTicker()
-        val stopwatch = Stopwatch.Impl(ticker)
+        val testScheduler = TestScheduler()
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
-        val stopwatchListener = Mockito.mock(Stopwatch.StopwatchListener::class.java)
+        val observer1 = TestObserver<Long>()
 
-        stopwatch.resumeStopwatch(stopwatchListener)
+        stopwatch.value.subscribe(observer1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener).onValueChange(1)
+        stopwatch.resume()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener).onValueChange(2)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
 
-        stopwatch.pauseStopwatch(stopwatchListener)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener, never()).onValueChange(3)
+        stopwatch.pause()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueCount(2)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
+
+        observer1.dispose()
     }
 
     @Test
-    fun twoListenersTest() {
-        val ticker = TestTicker()
-        val stopwatch = Stopwatch.Impl(ticker)
+    fun twoObserversTest() {
+        val testScheduler = TestScheduler()
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
-        val stopwatchListener1 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener2 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
+        val observer1 = TestObserver<Long>()
+        val observer2 = TestObserver<Long>()
 
-        stopwatch.resumeStopwatch(stopwatchListener1)
+        stopwatch.value.subscribe(observer1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(1)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(1)
+        stopwatch.resume()
 
-        stopwatch.resumeStopwatch(stopwatchListener2)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
+        observer2.assertNever(0)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(2)
-        Mockito.verify(stopwatchListener2).onValueChange(2)
+        stopwatch.value.subscribe(observer2)
 
-        stopwatch.pauseStopwatch(stopwatchListener1)
+        stopwatch.resume()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(3)
-        Mockito.verify(stopwatchListener2).onValueChange(3)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
 
-        stopwatch.pauseStopwatch(stopwatchListener2)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener2, never()).onValueChange(4)
+        stopwatch.pause()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 3)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
+
+        observer2.cancel()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 4)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
+
+        stopwatch.pause()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 4)
+        observer2.assertValueAt(observer2.valueCount() - 1, 3)
+
+        observer1.cancel()
     }
 
     @Test
-    fun fiveListenersTest() {
-        val ticker = TestTicker()
-        val stopwatch = Stopwatch.Impl(ticker)
+    fun fiveObserversTest() {
+        val testScheduler = TestScheduler()
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
-        val stopwatchListener1 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener2 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener3 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener4 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener5 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
+        val observer1 = TestObserver<Long>()
+        val observer2 = TestObserver<Long>()
+        val observer3 = TestObserver<Long>()
+        val observer4 = TestObserver<Long>()
+        val observer5 = TestObserver<Long>()
 
-        stopwatch.resumeStopwatch(stopwatchListener1)
+        stopwatch.value.subscribe(observer1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(1)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(1)
-        Mockito.verify(stopwatchListener3, never()).onValueChange(1)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(1)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(1)
+        stopwatch.resume()
 
-        stopwatch.resumeStopwatch(stopwatchListener2)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
+        observer2.assertNever(0)
+        observer3.assertNever(0)
+        observer4.assertNever(0)
+        observer5.assertNever(0)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(2)
-        Mockito.verify(stopwatchListener2).onValueChange(2)
-        Mockito.verify(stopwatchListener3, never()).onValueChange(2)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(2)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(2)
+        stopwatch.resume()
 
-        stopwatch.resumeStopwatch(stopwatchListener3)
+        stopwatch.value.subscribe(observer2)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(3)
-        Mockito.verify(stopwatchListener2).onValueChange(3)
-        Mockito.verify(stopwatchListener3).onValueChange(3)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(3)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(3)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
+        observer3.assertNever(1)
+        observer4.assertNever(1)
+        observer5.assertNever(1)
 
-        stopwatch.pauseStopwatch(stopwatchListener2)
+        stopwatch.resume()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(4)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(4)
-        Mockito.verify(stopwatchListener3).onValueChange(4)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(4)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(4)
+        stopwatch.value.subscribe(observer3)
 
-        stopwatch.pauseStopwatch(stopwatchListener1)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
+        observer3.assertValueAt(observer3.valueCount() - 1, 2)
+        observer4.assertNever(2)
+        observer5.assertNever(2)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(5)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(5)
-        Mockito.verify(stopwatchListener3).onValueChange(5)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(5)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(5)
+        stopwatch.pause()
 
-        stopwatch.resumeStopwatch(stopwatchListener4)
+        observer2.cancel()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(6)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(6)
-        Mockito.verify(stopwatchListener3).onValueChange(6)
-        Mockito.verify(stopwatchListener4).onValueChange(6)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(6)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 3)
+        observer2.assertNever(3)
+        observer3.assertValueAt(observer3.valueCount() - 1, 3)
+        observer4.assertNever(3)
+        observer5.assertNever(3)
 
-        stopwatch.pauseStopwatch(stopwatchListener4)
+        stopwatch.pause()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(7)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(7)
-        Mockito.verify(stopwatchListener3).onValueChange(7)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(7)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(7)
+        observer1.cancel()
 
-        stopwatch.resumeStopwatch(stopwatchListener5)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(4)
+        observer2.assertNever(4)
+        observer3.assertValueAt(observer3.valueCount() - 1, 4)
+        observer4.assertNever(4)
+        observer5.assertNever(4)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(8)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(8)
-        Mockito.verify(stopwatchListener3).onValueChange(8)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(8)
-        Mockito.verify(stopwatchListener5).onValueChange(8)
+        stopwatch.resume()
 
-        stopwatch.pauseStopwatch(stopwatchListener3)
+        stopwatch.value.subscribe(observer4)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(9)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(9)
-        Mockito.verify(stopwatchListener3, never()).onValueChange(9)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(9)
-        Mockito.verify(stopwatchListener5).onValueChange(9)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(5)
+        observer2.assertNever(5)
+        observer3.assertValueAt(observer3.valueCount() - 1, 5)
+        observer4.assertValueAt(observer4.valueCount() - 1, 5)
+        observer5.assertNever(5)
 
-        stopwatch.pauseStopwatch(stopwatchListener5)
+        stopwatch.pause()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(10)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(10)
-        Mockito.verify(stopwatchListener3, never()).onValueChange(10)
-        Mockito.verify(stopwatchListener4, never()).onValueChange(10)
-        Mockito.verify(stopwatchListener5, never()).onValueChange(10)
+        observer4.cancel()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(6)
+        observer2.assertNever(6)
+        observer3.assertValueAt(observer3.valueCount() - 1, 6)
+        observer4.assertNever(6)
+        observer5.assertNever(6)
+
+        stopwatch.resume()
+
+        stopwatch.value.subscribe(observer5)
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(7)
+        observer2.assertNever(7)
+        observer3.assertValueAt(observer3.valueCount() - 1, 7)
+        observer4.assertNever(7)
+        observer5.assertValueAt(observer5.valueCount() - 1, 7)
+
+        stopwatch.pause()
+
+        observer3.cancel()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(8)
+        observer2.assertNever(8)
+        observer3.assertNever(8)
+        observer4.assertNever(8)
+        observer5.assertValueAt(observer5.valueCount() - 1, 8)
+
+        stopwatch.pause()
+
+        observer5.cancel()
+
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(9)
+        observer2.assertNever(9)
+        observer3.assertNever(9)
+        observer4.assertNever(9)
+        observer5.assertNever(9)
     }
 
     @Test
     fun resumeAfterPauseAll() {
-        val ticker = TestTicker()
-        val stopwatch = Stopwatch.Impl(ticker)
+        val testScheduler = TestScheduler()
+        val stopwatch = Stopwatch.Impl(testScheduler)
 
-        val stopwatchListener1 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
-        val stopwatchListener2 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
+        val observer1 = TestObserver<Long>()
+        val observer2 = TestObserver<Long>()
 
-        stopwatch.resumeStopwatch(stopwatchListener1)
+        stopwatch.value.subscribe(observer1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(1)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(1)
+        stopwatch.resume()
 
-        stopwatch.pauseStopwatch(stopwatchListener1)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertValueAt(observer1.valueCount() - 1, 0)
+        observer2.assertNever(0)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(2)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(2)
+        stopwatch.pause()
 
-        stopwatch.resumeStopwatch(stopwatchListener2)
+        observer1.cancel()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(2)
-        Mockito.verify(stopwatchListener2).onValueChange(2)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(1)
+        observer2.assertNever(1)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(3)
-        Mockito.verify(stopwatchListener2).onValueChange(3)
+        stopwatch.value.subscribe(observer2)
 
-        stopwatch.pauseStopwatch(stopwatchListener2)
+        stopwatch.resume()
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(4)
-        Mockito.verify(stopwatchListener2, never()).onValueChange(4)
-    }
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(1)
+        observer2.assertValueAt(observer2.valueCount() - 1, 1)
 
-    @Test
-    fun wrongResumePauseOrder() {
-        val ticker = TestTicker()
-        val stopwatch = Stopwatch.Impl(ticker)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(2)
+        observer2.assertValueAt(observer2.valueCount() - 1, 2)
 
-        val stopwatchListener1 = Mockito.mock(Stopwatch.StopwatchListener::class.java)
+        stopwatch.pause()
 
-        stopwatch.pauseStopwatch(stopwatchListener1)
+        testScheduler.advanceTimeBy(1, TimeUnit.SECONDS)
+        observer1.assertNever(3)
+        observer2.assertNever(3)
 
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(1)
-
-        stopwatch.resumeStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(1)
-
-        stopwatch.pauseStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(2)
-
-        stopwatch.resumeStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(2)
-
-        stopwatch.resumeStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1).onValueChange(3)
-
-        stopwatch.pauseStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(4)
-
-        stopwatch.pauseStopwatch(stopwatchListener1)
-
-        ticker.tickListener?.onTick()
-        Mockito.verify(stopwatchListener1, never()).onValueChange(5)
+        observer2.cancel()
     }
 
 }

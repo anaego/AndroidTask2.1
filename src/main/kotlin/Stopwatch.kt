@@ -1,37 +1,41 @@
-import java.util.concurrent.CopyOnWriteArraySet
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
+
 
 interface Stopwatch {
 
-    interface StopwatchListener {
-        fun onValueChange(value: Long)
-    }
+    val value: Observable<Long>
+    fun pause()
+    fun resume()
 
-    fun resumeStopwatch(stopwatchListener: StopwatchListener)
-    fun pauseStopwatch(stopwatchListener: StopwatchListener)
+    class Impl(private val scheduler: Scheduler) : Stopwatch {
 
-    class Impl(private val ticker: Ticker) : Stopwatch, Ticker.TickListener {
+        override val value = BehaviorSubject.create<Long>().toSerialized()
+        private val consumersCountChange = PublishSubject.create<Long>().toSerialized()
+        private val actualValueCounter = AtomicLong()
 
-        private val listeners = CopyOnWriteArraySet<StopwatchListener>()
-        private val value = AtomicLong(0)
-
-        override fun onTick() {
-            val newValue = value.incrementAndGet()
-            listeners.forEach { it.onValueChange(newValue) }
+        init {
+            consumersCountChange
+                .scan { consumerCount, countChange -> consumerCount + countChange }
+                .filter { consumerCount -> consumerCount in 0..1 }
+                .switchMap { o ->
+                    if (o < 1) {
+                        Observable.never<Long>()
+                    } else {
+                        Observable
+                            .interval(1, TimeUnit.SECONDS, scheduler)
+                            .map { _ -> actualValueCounter.getAndIncrement() }
+                    }
+                }
+                .subscribe(value)
         }
 
-        override fun resumeStopwatch(stopwatchListener: StopwatchListener) {
-            listeners.add(stopwatchListener)
-            if (listeners.size == 1) {
-                ticker.start(this)
-            }
-        }
+        override fun pause() = consumersCountChange.onNext(-1)
 
-        override fun pauseStopwatch(stopwatchListener: StopwatchListener) {
-            listeners.remove(stopwatchListener)
-            if (listeners.size == 0) {
-                ticker.stop()
-            }
-        }
+        override fun resume() = consumersCountChange.onNext(+1)
     }
 }
